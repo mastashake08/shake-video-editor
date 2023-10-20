@@ -1,0 +1,43 @@
+{
+  "name": "npm-package-template",
+  "version": "1.0.0-alpha",
+  "description": "npm package template.",
+  "author": "Mark <mark@remarkablemark.org>",
+  "main": "index.js",
+  "scripts": {
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "npm run lint -- --fix",
+    "release": "standard-version --no-verify",
+    "test": "mocha",
+    "test:coverage": "nyc npm test",
+    "test:coverage:report": "nyc report --reporter=html",
+    "test:watch": "mocha --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/remarkablemark/npm-package-template"
+  },
+  "bugs": {
+    "url": "https://github.com/remarkablemark/npm-package-template/issues"
+  },
+  "keywords": [
+    "npm-package-template"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "coveralls": "^3.1.0",
+    "eslint": "^7.15.0",
+    "eslint-plugin-prettier": "^3.2.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.3",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.2.1",
+    "standard-version": "^9.0.0"
+  },
+  "files": [],
+  "license": "MIT"
+}
