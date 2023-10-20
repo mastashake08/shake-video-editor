@@ -1,20 +1,20 @@
 import { MPD } from 'dash-manifest-creator'
 class VideoEditor {
     constructor(stream, mediaUrl = '') {
-        this._stream = stream;
-        this._videoTrackProcessor = new window.MediaStreamTrackProcessor({ track: this._stream.getVideoTracks()[0] });
-        this._audioTrackProcessor = new window.MediaStreamTrackProcessor({ track: this._stream.getAudioTracks()[0] });
-        this._videoTrackGenerator = new MediaStreamTrackGenerator({ kind: 'video' });
-        this._audioTrackGenerator = new MediaStreamTrackGenerator({ kind: 'audio' });
-        this._mediaStream = new MediaStream();
-        this._dash_manifest = new MPD();
+        this._stream = new MediaStream(stream);
+        this._videoTrackProcessor = null
+        this._audioTrackProcessor = null
+        this._videoTrackGenerator = null
+        this._audioTrackGenerator = null
+        this._dash_manifest = new MPD(null, document);
+        console.log(this._dash_manifest)
+        const videoTransforms = [this.videoFrameEditsTransform, this.videoDashTransform]
+        const audioTransforms = this.audioTransform
         this._mediaUrl = mediaUrl;
-        this.addMediaTracks();
         this.addTransforms({
-            videoTransforms: [this.videoFrameEditsTransform],
-            audioTransforms: [this.audioTransform]
+            videoTransforms: videoTransforms, 
+            audioTransforms: audioTransforms
         })
-        
     }
 
      videoFrameEditsTransform(edits = {}) {
@@ -22,33 +22,42 @@ class VideoEditor {
             transform(videoFrame, controller) {
                 console.log([videoFrame, edits]);
                 const newFrame = videoFrame.clone();
-                videoFrame.close();
+                // videoFrame.close();
                 controller.enqueue(newFrame);
             }
         });
-        
+        return transformer;
     }
 
     videoDashTransform(videoFrame, controller) {
+        console.log(this._dash_manifest)
         this._dash_manifest.createMpd(videoFrame, this._mediaUrl);
         console.log(this._dash_manifest.createMpd().next().value);
     }
 
     addMediaTracks() {
-        this._mediaStream.addTrack(this._videoTrackGenerator);
-        this._mediaStream.addTrack(this._audioTrackGenerator);
+        new MediaStream([this._videoTrackGenerator, this._audioTrackGenerator]);
     }
 
-    addTransforms({videoTransforms = [], audioTransforms = []}) {
-        for (const vT in videoTransforms) {
-            this._videoTrackProcessor.readable.pipeThrough(vT);
-        
+     addTransforms({videoTransforms = [], audioTransforms = []}) {
+        console.log(videoTransforms)
+        const vids =  this._stream.getVideoTracks();
+        const auds =  this._stream.getAudioTracks();
+        this._videoTrackProcessor = new window.MediaStreamTrackProcessor({ track: vids[0] });
+        this._audioTrackProcessor = new window.MediaStreamTrackProcessor({ track: auds[0] });
+        this._videoTrackGenerator = new MediaStreamTrackGenerator({ kind: 'video' });
+        this._audioTrackGenerator = new MediaStreamTrackGenerator({ kind: 'audio' });
+        for(let i = 0; i < videoTransforms.length; ++i) {
+            console.log(videoTransforms[i])
+            this._videoTrackProcessor.readable.pipeThrough(videoTransforms[i]()).pipeTo(this._videoTrackGenerator.writable);
+            console.log(this._videoTrackProcessor)
         }
-        this._videoTrackProcessor.readable.pipeTo(this._videoTrackGenerator.writable);
-        for (const aT in audioTransforms) {
-            this._audioTrackProcessor.readable.pipeThrough(aT);
+        for(let i = 0; i < audioTransforms.length; ++i) {
+            console.log(audioTransforms[i])
+            this._audioTrackProcessor.readable.pipeThrough(audioTransforms[i]()).pipeTo(this._audioTrackGenerator.writable);
+            console.log(this._videoTrackProcessor)
         }
-        this._audioTrackProcessor.readable.pipeTo(this._audioTrackGenerator.writable);
+
     }
 
        
