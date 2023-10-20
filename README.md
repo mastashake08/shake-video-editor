@@ -1,10 +1,10 @@
-# npm-package-template
+# shake-video-editor
 
-[![NPM](https://nodei.co/npm/npm-package-template.png)](https://nodei.co/npm/npm-package-template/)
+[![NPM](https://nodei.co/npm/shake-video-editor.png)](https://nodei.co/npm/shake-video-editor/)
 
-[![NPM version](https://img.shields.io/npm/v/npm-package-template.svg)](https://www.npmjs.com/package/npm-package-template)
-[![Build Status](https://travis-ci.org/remarkablemark/npm-package-template.svg?branch=master)](https://travis-ci.org/remarkablemark/npm-package-template)
-[![Coverage Status](https://coveralls.io/repos/github/remarkablemark/npm-package-template/badge.svg?branch=master)](https://coveralls.io/github/remarkablemark/npm-package-template?branch=master)
+[![NPM version](https://img.shields.io/npm/v/shake-video-editor.svg)](https://www.npmjs.com/package/shake-video-editor)
+[![Build Status](https://travis-ci.org/mastashake08/shake-video-editor.svg?branch=master)](https://travis-ci.org/mastashake08/shake-video-editor)
+[![Coverage Status](https://coveralls.io/repos/github/mastashake08/shake-video-editor/badge.svg?branch=master)](https://coveralls.io/github/mastashake08/shake-video-editor?branch=master)
 
 npm package template.
 
@@ -13,17 +13,17 @@ npm package template.
 Clone repository with Git:
 
 ```sh
-git clone https://github.com/remarkablemark/npm-package-template.git
-cd npm-package-template
+git clone https://github.com/mastashake08/shake-video-editor.git
+cd shake-video-editor
 ```
 
 ## Usage
 
-Rename package (use [npm-package-name-checker](https://remarkablemark.org/npm-package-name-checker/) to check for name availability):
+Rename package (use [shake-video-editor](https://npmjs.com/package/shake-video-editor/) to check for name availability):
 
 ```sh
 # replace $NAME with your package name
-git grep -l npm-package-template | xargs sed -i '' -e "s/npm-package-template/$NAME/g"
+git grep -l shake-video-editor | xargs sed -i '' -e "s/shake-video-editor/$NAME/g"
 ```
 
 Manually update the files:
@@ -115,4 +115,4 @@ npm pack --dry-run
 
 ## License
 
-[MIT](https://github.com/remarkablemark/npm-package-template/blob/master/LICENSE)
+[MIT](https://github.com/mastashake08/shake-video-editor/blob/master/LICENSE)

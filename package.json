@@ -1,8 +1,8 @@
 {
-  "name": "npm-package-template",
-  "version": "1.0.0-alpha",
+  "name": "shake-video-editor",
+  "version": "1.0.3-alpha",
   "description": "npm package template.",
-  "author": "Mark <mark@remarkablemark.org>",
+  "author": "Jyrone Parker <jyrone.parker@gmail.com>",
   "main": "index.js",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
@@ -16,10 +16,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/remarkablemark/npm-package-template"
+    "url": "https://github.com/mastashake08/shake-video-editor"
   },
   "bugs": {
-    "url": "https://github.com/remarkablemark/npm-package-template/issues"
+    "url": "https://github.com/mastashake08/shake-video-editor/issues"
   },
   "keywords": [
     "npm-package-template"
@@ -36,7 +36,8 @@
     "mocha": "^8.2.1",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
-    "standard-version": "^9.0.0"
+    "standard-version": "^9.0.0",
+    "dash-manifest-creator":"/Users/jyroneparker/Desktop/dash-manifest-creator-2.0.0-alpha.tgz"
   },
   "files": [],
   "license": "MIT"

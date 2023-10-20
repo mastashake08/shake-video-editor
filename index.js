@@ -1,3 +1,4 @@
-module.exports = function () {
-  return 'npm-package-template';
-};
+import { VideoEditor } from "./classes/VideoEditor";
+export {
+  VideoEditor
+}
