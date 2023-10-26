@@ -1,6 +1,6 @@
 {
   "name": "@mastashake08/shake-video-editor",
-  "version": "1.2.0-alpha",
+  "version": "1.2.1-alpha",
   "description": "Edit videos in the web!",
   "author": "Jyrone Parker <jyrone.parker@gmail.com>",
   "main": "index.js",

@@ -1,6 +1,6 @@
 import { VideoEditor } from "../classes/VideoEditor"
 class VideoPreview extends HTMLCanvasElement {
-    static observedAttributes = ["videoId"];
+    static observedAttributes = ["video"];
     #video;
     width; 
     height;
@@ -8,9 +8,12 @@ class VideoPreview extends HTMLCanvasElement {
         super()
         this.setVideo()
         this.getContext("2d")
+        const host = document.getAttribute('video')
+        const shadow = host.attachShadow({ mode: "open" });
+        shadow.appendChild(this);
     }
     setVideo() {
-        let video = this.getAttribute('videoId');
+        let video = document.getAttribute('video');
         video.addEventListener('loadedmetadata', function() {
             this.width = video.videoWidth;
             this.height = video.videoHeight;
