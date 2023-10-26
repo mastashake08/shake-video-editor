@@ -1,9 +1,10 @@
 {
-  "name": "shake-video-editor",
-  "version": "1.0.8-alpha",
+  "name": "@mastashake08/shake-video-editor",
+  "version": "1.1.0-alpha",
   "description": "npm package template.",
   "author": "Jyrone Parker <jyrone.parker@gmail.com>",
   "main": "index.js",
+  "module": "index.js",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint --ignore-path .gitignore .",
@@ -25,7 +26,7 @@
     "npm-package-template"
   ],
   "dependencies": {
-    "dash-manifest-creator":"/Users/jyroneparker/Programs/dash-manifest-creator/dash-manifest-creator-2.0.1-alpha.tgz"
+    "@mastashake08/dash-manifest-creator":"/Users/jyroneparker/Programs/dash-manifest-creator/mastashake08-dash-manifest-creator-2.0.1-alpha.tgz"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",

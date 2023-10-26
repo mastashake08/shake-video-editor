@@ -1,6 +1,7 @@
-import { MPD } from 'dash-manifest-creator'
+import { MPD } from '@mastashake08/dash-manifest-creator'
 class VideoEditor {
     constructor(stream, mediaUrl = '') {
+        this._videoFrames = []
         this._stream = new MediaStream(stream);
         this._videoTrackProcessor = null
         this._audioTrackProcessor = null
@@ -8,7 +9,7 @@ class VideoEditor {
         this._audioTrackGenerator = null
         this._dash_manifest = new MPD(null, document);
         console.log(this._dash_manifest)
-        const videoTransforms = [this.videoFrameEditsTransform, this.videoDashTransform]
+        const videoTransforms = [this.getVideoFramesTransform]
         const audioTransforms = this.audioTransform
         this._mediaUrl = mediaUrl;
         this.addTransforms({
@@ -17,13 +18,14 @@ class VideoEditor {
         })
     }
 
-     videoFrameEditsTransform(edits = {}) {
+     getVideoFramesTransform() {
         const transformer = new window.TransformStream({
             transform(videoFrame, controller) {
-                console.log([videoFrame, edits]);
                 const newFrame = videoFrame.clone();
-                // videoFrame.close();
+                // 
+                this._videoFrames.push(newFrame);
                 controller.enqueue(newFrame);
+                videoFrame.close();
             }
         });
         return transformer;
