@@ -49,7 +49,7 @@ class VideoPreview extends HTMLCanvasElement {
           this.setVideo()
       }
 }
-
+customElements.define("video-preview", VideoPreview);
 export {
     VideoPreview
 }
