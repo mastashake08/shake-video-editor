@@ -1,83 +1,32 @@
-import { FileSystem } from 'shake-file'
-import { MPD } from 'dash-manifest-creator'
+import { MPD } from '@mastashake08/dash-manifest-creator'
+
 class VideoEditor {
-    constructor(mediaUrl = '') {
-        this._file = null
-        this._stream = null
+    constructor(stream, mediaUrl = '') {
+        this._videoFrames = []
+        this._stream = new MediaStream(stream);
         this._videoTrackProcessor = null
         this._audioTrackProcessor = null
         this._videoTrackGenerator = null
         this._audioTrackGenerator = null
-        this._encodedChunks = []
-        this._dash_manifest = null
-        
-        this._mediaUrl = mediaUrl;
-        this._videoEncoder = new VideoEncoder({
-            output: (chunk, metadata) => this.setEncodedChunks(chunk,metadata),
-            error(error) {
-              console.log(error);
-            },
-          });
-          const encoderConfig = {
-            codec: "vp09.00.10.08",
-            width: 800,
-            height: 600,
-            bitrateMode: "quantizer",
-            framerate: 30,
-            latencyMode: "realtime",
-          }
-          this._videoEncoder.configure(encoderConfig)
-        
-    }
-
-    setEncodedChunks(chunk, metadata) {
-        console.log(chunk.timestamp);
-        console.log(chunk.byteLength);
-        console.log(JSON.stringify(metadata));
-        this._encodedChunks.push(chunk)
-      }
-
-    setMediaUrl(url) {
-        this._mediaUrl = url
-    }
-
-    async getVideoFile() {
-        const pickerOpts = {
-            types: [
-              {
-                description: "Videos",
-                accept: {
-                  "video/*": [".webm", ".mp4"],
-                },
-              },
-            ],
-            excludeAcceptAllOption: true,
-            multiple: false,
-          };
-        const fs = new FileSystem(pickerOpts)
-        this._file = await fs.getFile()
-        const vid = document.createElement('video')
-        vid.src = URL.createObjectURL(this._file)
-
-        vid.controls = true
-        const videoTransforms = [this.videoDashTransform]
+        this._dash_manifest = new MPD(null, document);
+        console.log(this._dash_manifest)
+        const videoTransforms = [this.getVideoFramesTransform]
         const audioTransforms = this.audioTransform
-        vid.onplay = (ev) => {
-            const stream = vid.captureStream()
-
-            this._stream = new MediaStream(stream);
-            this.addTransforms({videoTransforms: videoTransforms, audioTransforms: audioTransforms})
-
-        }
-        document.body.appendChild(vid)
+        this._mediaUrl = mediaUrl;
+        this.addTransforms({
+            videoTransforms: videoTransforms, 
+            audioTransforms: audioTransforms
+        })
     }
-    videoFrameEditsTransform(edits = {}) {
+
+     getVideoFramesTransform() {
         const transformer = new window.TransformStream({
             transform(videoFrame, controller) {
-                console.log([videoFrame, edits]);
                 const newFrame = videoFrame.clone();
-                videoFrame.close();
+                // 
+                this._videoFrames.push(newFrame);
                 controller.enqueue(newFrame);
+                videoFrame.close();
             }
         });
         return transformer;

@@ -49,3 +49,7 @@ dist
 
 # Mac OS
 .DS_Store
+
+
+#npm pack builds
+*.tgz

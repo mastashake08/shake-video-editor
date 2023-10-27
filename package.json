@@ -1,9 +1,10 @@
 {
-  "name": "shake-video-editor",
-  "version": "1.1.4-alpha",
-  "description": "npm package template.",
+  "name": "@mastashake08/shake-video-editor",
+  "version": "1.2.1-alpha",
+  "description": "Edit videos in the web!",
   "author": "Jyrone Parker <jyrone.parker@gmail.com>",
   "main": "index.js",
+  "module": "index.js",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint --ignore-path .gitignore .",
@@ -22,11 +23,12 @@
     "url": "https://github.com/mastashake08/shake-video-editor/issues"
   },
   "keywords": [
-    "npm-package-template"
+    "video frames",
+    "video editor",
+    "streaming"
   ],
   "dependencies": {
-    "dash-manifest-creator": "/Users/jyroneparker/Programs/dash-manifest-creator/dash-manifest-creator-2.0.1-alpha.tgz",
-    "shake-file": "1.5.1"
+    "@mastashake08/dash-manifest-creator": "2.1.0-alpha"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",

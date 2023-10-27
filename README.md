@@ -1,8 +1,8 @@
 # shake-video-editor
 
-[![NPM](https://nodei.co/npm/shake-video-editor.png)](https://nodei.co/npm/shake-video-editor/)
+[![NPM](https://nodei.co/npm/@mastashake08/shake-video-editor.png)](https://nodei.co/npm/shake-video-editor/)
 
-[![NPM version](https://img.shields.io/npm/v/shake-video-editor.svg)](https://www.npmjs.com/package/shake-video-editor)
+[![NPM version](https://img.shields.io/npm/v/@mastashake08/shake-video-editor.svg)](https://www.npmjs.com/package/shake-video-editor)
 [![Build Status](https://travis-ci.org/mastashake08/shake-video-editor.svg?branch=master)](https://travis-ci.org/mastashake08/shake-video-editor)
 [![Coverage Status](https://coveralls.io/repos/github/mastashake08/shake-video-editor/badge.svg?branch=master)](https://coveralls.io/github/mastashake08/shake-video-editor?branch=master)
 
