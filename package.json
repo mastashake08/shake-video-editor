@@ -1,6 +1,6 @@
 {
   "name": "shake-video-editor",
-  "version": "1.0.8-alpha",
+  "version": "1.1.4-alpha",
   "description": "npm package template.",
   "author": "Jyrone Parker <jyrone.parker@gmail.com>",
   "main": "index.js",
@@ -25,7 +25,8 @@
     "npm-package-template"
   ],
   "dependencies": {
-    "dash-manifest-creator":"/Users/jyroneparker/Programs/dash-manifest-creator/dash-manifest-creator-2.0.1-alpha.tgz"
+    "dash-manifest-creator": "/Users/jyroneparker/Programs/dash-manifest-creator/dash-manifest-creator-2.0.1-alpha.tgz",
+    "shake-file": "1.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
