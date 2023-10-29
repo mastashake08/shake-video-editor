@@ -19,7 +19,7 @@ class VideoEditor {
         })
     }
 
-     getVideoFramesTransform() {
+    getVideoFramesTransform() {
         const transformer = new window.TransformStream({
             transform(videoFrame, controller) {
                 const newFrame = videoFrame.clone();
