@@ -4,20 +4,22 @@ class VideoPreview extends HTMLCanvasElement {
     #video;
     width; 
     height;
-    constructor() {
+    constructor(videoId='') {
         super()
-        this.setVideo()
+        this.setVideo(videoId)
         this.getContext("2d")
-        const host = document.getAttribute('video')
-        const shadow = host.attachShadow({ mode: "open" });
-        shadow.appendChild(this);
+        
     }
-    setVideo() {
-        let video = document.getAttribute('video');
+    setVideo(videoId) {
+        let video = document.getElementById(videoId);
+        const host = document.getElementById('app')
+        //const shadow = host.attachShadow({ mode: "open" });
+        //shadow.appendChild(this);
+        console.log(video)
         video.addEventListener('loadedmetadata', function() {
             this.width = video.videoWidth;
             this.height = video.videoHeight;
-          }).bind(this);
+          });
           
           video.addEventListener('play', function() {
             var $this = this; //cache
@@ -49,7 +51,7 @@ class VideoPreview extends HTMLCanvasElement {
           this.setVideo()
       }
 }
-customElements.define("video-preview", VideoPreview);
+customElements.define("video-preview", VideoPreview, { extends: 'canvas'});
 export {
     VideoPreview
 }
