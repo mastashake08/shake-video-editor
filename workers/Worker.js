@@ -1,8 +1,21 @@
-import * from '../classes/transformers'
+import { RecorderTransformer } from '../classes/transformers/RecorderTransformer'
 const mediaSource = new MediaSource()
+function getAllFrames(data) {
+    const track = data.track 
+    const trackData = { kind: track.kind }
+    let transformer = null
+    switch(trackData.kind) {
+        case 'audio':
+            transformer = getAudioFrames()
+            
+        case 'video':
+            transformer = getVideoFrames()  
+    }
+    return transformer
+}
 
-function getVideoFrames ({readable, writable}) {
-    const getFramesTransformer = new window.TransformStream({
+function getVideoFrames () {
+    const getFramesTransformer = new TransformStream({
         transform(videoFrame, controller) {  
              const newFrame = videoFrame.clone();
              videoFrame.close();
@@ -10,39 +23,50 @@ function getVideoFrames ({readable, writable}) {
              self.postMessage({'name': 'new-video-frame', data: newFrame})
          },
          flush() {
-            self.postMessage({
-                name: 'video-frames-available', data: {readable, writable}
-            }, [
-                {
-                    readable, 
-                    writable
-                }
-            ])
+            
          }
      });
     return getFramesTransformer
 }
 
-function encodeVideoFrames ({readable, writable, encoder, decoder}) {
+function encodeVideoFrames ({encoder}) {
     const encodeFrameTransformer = new TransformStream({
         start(controller) {
 
         },
         transform(videoFrame, controller) {
             const newFrame = videoFrame.clone();
-            const encodedChunks = encoder.encode(newFrame)
-            const decodedFrame = decoder.decoder(encodedChunks)
-
+            const encodedChunk = encoder.encode(newFrame)
+            
             videoFrame.close();
-            const tees = controller.readable.tee()
-            controller.enqueue()
+            controller.enqueue(encodedChunk)
             
         },
         flush() {}
     })
+    return encodeFrameTransformer
 }
-function getAudioFrames ({readable, writable}) {
-    const audioTransformer = new window.TransformStream({
+
+function decodeVideoFrames ({decoder}) {
+    const decodeFrameTransformer = new TransformStream({
+        start(controller) {
+
+        },
+        transform(encodedChunk, controller) {
+            const newFrame = encodedChunk.clone();
+            encodedChunk.close()
+            const decodedFrame = decoder.decoder(newFrame)
+
+            controller.enqueue(decodedFrame)
+            
+        },
+        flush() {}
+    })
+    return decodeFrameTransformer
+}
+
+function getAudioFrames () {
+    const audioTransformer = new TransformStream({
         transform(audioFrame, controller) {  
              const newFrame = audioFrame.clone();
              audioFrame.close();
@@ -50,14 +74,7 @@ function getAudioFrames ({readable, writable}) {
              self.postMessage({'name': 'new-audio-frame', data: newFrame})
          },
          close() {
-            self.postMessage({
-                name: 'audio-frames-available', data: {readable, writable}
-            }, [
-                {
-                    readable, 
-                    writable
-                }
-            ])
+            
          }
      });
 
@@ -68,29 +85,18 @@ onmessage = (e) => {
     try {
         const name = e.data.name
         const data = e.data.data
-          
+        const { readable, writable } = data
         switch(name) {
             case 'get-frames':
-                const track = data.track
                 
-                const trackData = { kind: track.kind }
-                const { readable } = new MediaStreamTrackProcessor({track: track});
-                const { writable } = new MediaStreamTrackGenerator(trackData)
-                const transformConfig = {
-                    readable, 
-                    writable
-                }
-                switch(trackData.kind) {
-                    case 'audio':
-                        const audioTransformer = getAudioFrames(transformConfig)
-                        readable.pipeThrough(audioTransformer)
-                    case 'video':
-                        const getFramesTransformer = getVideoFrames(transformConfig)
-                        readable.pipeThrough(getFramesTransformer)               
-                }
-                readable.pipeTo(writable)
+                // const { readable } = new MediaStreamTrackProcessor({track: track});
+                // const { writable } = new MediaStreamTrackGenerator(trackData)
+                readable.pipeThrough(getAllFrames(data)).pipeTo(writable)
             case 'export-video':
-                mediaSource.
+                const {encoder, decoder} = data
+                // const { readable } = new MediaStreamTrackProcessor({track: track});
+                // const { writable } = new MediaStreamTrackGenerator(trackData)
+                readable.pipeThrough(getAllFrames(data)).pipeThrough(encodeVideoFrames(encoder)).pipeThrough(decodeVideoFrames(decoder)).pipeTo(writable)
     
         }
     } catch (error) {
