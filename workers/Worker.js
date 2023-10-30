@@ -1,13 +1,15 @@
+import * from '../classes/transformers'
+const mediaSource = new MediaSource()
 
-function getVideoFrames ({writable, readable}) {
-    const vidTransformer = new window.TransformStream({
+function getVideoFrames ({readable, writable}) {
+    const getFramesTransformer = new window.TransformStream({
         transform(videoFrame, controller) {  
              const newFrame = videoFrame.clone();
              videoFrame.close();
              controller.enqueue(newFrame);
              self.postMessage({'name': 'new-video-frame', data: newFrame})
          },
-         close() {
+         flush() {
             self.postMessage({
                 name: 'video-frames-available', data: {readable, writable}
             }, [
@@ -18,13 +20,28 @@ function getVideoFrames ({writable, readable}) {
             ])
          }
      });
-
-     return vidTransformer
+    return getFramesTransformer
 }
 
-function getAudioFrames ({writable, readable}) {
- 
-   
+function encodeVideoFrames ({readable, writable, encoder, decoder}) {
+    const encodeFrameTransformer = new TransformStream({
+        start(controller) {
+
+        },
+        transform(videoFrame, controller) {
+            const newFrame = videoFrame.clone();
+            const encodedChunks = encoder.encode(newFrame)
+            const decodedFrame = decoder.decoder(encodedChunks)
+
+            videoFrame.close();
+            const tees = controller.readable.tee()
+            controller.enqueue()
+            
+        },
+        flush() {}
+    })
+}
+function getAudioFrames ({readable, writable}) {
     const audioTransformer = new window.TransformStream({
         transform(audioFrame, controller) {  
              const newFrame = audioFrame.clone();
@@ -51,10 +68,11 @@ onmessage = (e) => {
     try {
         const name = e.data.name
         const data = e.data.data
-        const mediaStream = data.mediaStream    
+          
         switch(name) {
             case 'get-frames':
                 const track = data.track
+                
                 const trackData = { kind: track.kind }
                 const { readable } = new MediaStreamTrackProcessor({track: track});
                 const { writable } = new MediaStreamTrackGenerator(trackData)
@@ -67,13 +85,12 @@ onmessage = (e) => {
                         const audioTransformer = getAudioFrames(transformConfig)
                         readable.pipeThrough(audioTransformer)
                     case 'video':
-                        const vidTransformer = getVideoFrames(transformConfig)
-                        readable.pipeThrough(vidTransformer)               
+                        const getFramesTransformer = getVideoFrames(transformConfig)
+                        readable.pipeThrough(getFramesTransformer)               
                 }
                 readable.pipeTo(writable)
             case 'export-video':
-                
-
+                mediaSource.
     
         }
     } catch (error) {

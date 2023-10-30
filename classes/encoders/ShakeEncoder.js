@@ -54,11 +54,14 @@ class ShakeEncoder extends VideoEncoder{
         //     processor: trackProcessor,
         //     generator: trackGenerator
         // }
-        worker.postMessage({
-            name: 'get-frames', data: track}, [track])
+        worker.postMessage(
+            {
+            name: 'get-frames', 
+            data: track
+            }, [ track ])
     
         })
-        this.frameWorker = new Worker('../workers/Worker.js')
+        this.frameWorker = new Worker('../workers/Worker.js', {type: 'module'})
         this.frameWorker.onmessage(ev => {
             const name = ev.data.name
             const data = ev.data.data
