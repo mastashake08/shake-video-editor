@@ -1,6 +1,6 @@
 {
   "name": "@mastashake08/shake-video-editor",
-  "version": "2.0.0-alpha",
+  "version": "2.0.1-alpha",
   "description": "Edit videos in the web!",
   "author": "Jyrone Parker <jyrone.parker@gmail.com>",
   "main": "index.js",
@@ -28,7 +28,8 @@
     "streaming"
   ],
   "dependencies": {
-    "@mastashake08/dash-manifest-creator": "2.1.0-alpha"
+    "@mastashake08/dash-manifest-creator": "2.1.0-alpha",
+    "@mastashake08/shake-file": "2.0.2-alpha"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",

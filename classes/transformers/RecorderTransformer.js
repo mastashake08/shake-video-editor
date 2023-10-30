@@ -1,3 +1,4 @@
+import { ShakeFS } from "@mastashake08/shake-file"
 class RecorderTransformer extends TransformStream {
     encodedChunks = []
     fileHandler = null
@@ -9,7 +10,7 @@ class RecorderTransformer extends TransformStream {
         fileHandler = null
         }) {
             super(transformer, writableStrategy, readableStrategy)
-            this.fileHandler = fileHandler
+            this.fileHandler = fileHandler === null ? fileHandler : this.setFileHandler()
             this.setWritable()
             
     }
@@ -19,7 +20,10 @@ class RecorderTransformer extends TransformStream {
         this.writableStream = await this.fileHandler.createWritable()
 
     }
-
+    async setFileHandler() {
+        const fs = new ShakeFS()
+        fs.getFile
+    }
     setTransformer() {
         return {
             async transform(chunk, controller) {
